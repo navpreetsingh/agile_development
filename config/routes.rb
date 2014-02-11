@@ -1,4 +1,6 @@
 AgileDevelopment::Application.routes.draw do
+  resources :products
+
   get "/says/hello"
 
   get "says/goodbye"
