@@ -91,4 +91,21 @@ class LineItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def decrement
+    @cart = current_cart
+    item = LineItem.find(params[:id])
+    @line_item = @cart.decrement_product(item)    
+    debugger
+    respond_to do |format|
+      if @line_item.save
+        format.html { redirect_to store_url }
+        format.js { @current_item = @line_item }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @line_item.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 end

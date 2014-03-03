@@ -1,6 +1,9 @@
 AgileDevelopment::Application.routes.draw do
   
-  resources :line_items
+  resources :line_items do
+    put "decrement" , on: :member
+
+  end
 
   resources :carts
 
@@ -11,6 +14,7 @@ AgileDevelopment::Application.routes.draw do
   get "/says/hello"
 
   get "says/goodbye"
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

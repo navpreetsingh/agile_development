@@ -12,6 +12,15 @@ class Cart < ActiveRecord::Base
   	current_item
   end
 
+  def decrement_product(item)        
+    if item.quantity == 1
+      item.destroy
+    else
+      item.quantity -= 1
+    end
+    item
+  end
+
   def total_price
     line_items.to_a.sum {|item| item.total_price }  
   end
