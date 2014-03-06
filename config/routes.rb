@@ -1,5 +1,7 @@
 AgileDevelopment::Application.routes.draw do
   
+  resources :orders
+
   resources :line_items do
     put "decrement" , on: :member
 

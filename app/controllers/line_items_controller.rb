@@ -96,7 +96,7 @@ class LineItemsController < ApplicationController
     @cart = current_cart
     item = LineItem.find(params[:id])
     @line_item = @cart.decrement_product(item)    
-    debugger
+    
     respond_to do |format|
       if @line_item.save
         format.html { redirect_to store_url }
