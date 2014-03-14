@@ -14,3 +14,27 @@
 //= require jquery.ui.effect-blind
 //= require jquery_ujs
 //= require_tree .
+
+$(document).ready(function(){
+	var url = window.location.pathname;
+	if (url.search("orders") == 1){
+		$("#checkout").attr("disabled", "disabled");
+	}
+	else {
+		$("#checkout").removeAttr("disabled");
+	}
+
+	$("#order_ship_date").datepicker({
+		beforeShow: function(input, inst){
+			setTimeout(function(){
+				inst.dpDiv.css({
+					top: 425,
+					left: 345
+				})
+			})
+		}
+	});
+	
+	
+
+});
