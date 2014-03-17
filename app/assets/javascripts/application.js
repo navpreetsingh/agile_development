@@ -25,11 +25,13 @@ $(document).ready(function(){
 	}
 
 	$("#order_ship_date").datepicker({
+		dateFormat: "yy-mm-dd",
 		beforeShow: function(input, inst){
 			setTimeout(function(){
-				inst.dpDiv.css({
-					top: 425,
-					left: 345
+				var pos = $("#order_ship_date").offset();
+				inst.dpDiv.css({					
+					top: pos.top + 20,
+					left: pos.left + 100
 				})
 			})
 		}

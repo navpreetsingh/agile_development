@@ -1,6 +1,9 @@
 class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
+
+  skip_before_filter :authoize, only: [:new, :create]
+
   def index
     @orders = Order.paginate page: params[:page], order: "created_at desc",
     per_page: 10
@@ -49,7 +52,7 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(params[:order])
     @order.add_line_items_from_cart(current_cart)
-
+    @order.ship_date = @order.ship_date.to_date
     respond_to do |format|
       if @order.save
         Cart.destroy(session[:cart_id])
@@ -69,7 +72,8 @@ class OrdersController < ApplicationController
   # PUT /orders/1.json
   def update
     @order = Order.find(params[:id])
-
+    @order.ship_date = @order.ship_date.to_date
+    
     respond_to do |format|
       if @order.update_attributes(params[:order])
         OrderNotifier.shipped(@order).deliver unless @order.ship_date.nil?
