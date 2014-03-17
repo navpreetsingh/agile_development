@@ -7,7 +7,7 @@ AgileDevelopment::Application.routes.draw do
 
     post "login" => :create
 
-    delete "login" => :destroy
+    delete "logout" => :destroy
   end
 
   resources :users
