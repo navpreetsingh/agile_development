@@ -1,4 +1,8 @@
 <div class="depot_form">
+  <% if flash[:alert] %>
+    <p id="notice"> <%= flash[:alert] %> </p>
+  <% end %>
+  
   <%= form_for(@user) do |f| %>
     <% if @user.errors.any? %>
       <div id="error_explanation">
@@ -17,12 +21,24 @@
       <div>
         <%= f.label :name %>:
         <%= f.text_field :name, size: 40 %>
-      </div>  
+      </div>
 
-      <div>
-        <%= f.label :password, "Password" %>:
-        <%= f.password_field :password, size: 40 %>
-      </div>  
+      <% if params[:action] == "edit" || params[:action] == "update" %>
+        <div>
+          <%= label_tag :current_password, "Current Password" %>:
+          <%= password_field_tag :current_password, size: 40 %>
+        </div> 
+        <div>
+          <%= f.label :password, "New Password" %>:
+          <%= f.password_field :password, size: 40 %>
+        </div>
+      
+      <% else %>  
+        <div>
+          <%= f.label :password, "Password" %>:
+          <%= f.password_field :password, size: 40 %>
+        </div>  
+      <% end %>
 
       <div>
         <%= f.label :password_confirmation, "Confirm" %>:
@@ -36,4 +52,3 @@
     </fieldset>  
   <% end %>
 </div>
-

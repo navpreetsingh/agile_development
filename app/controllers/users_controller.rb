@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   # GET /users
   # GET /users.json
+  skip_before_filter :authorize, only: [:new, :create]
   def index
     @users = User.all
 
@@ -58,15 +59,18 @@ class UsersController < ApplicationController
   # PUT /users/1.json
   def update
     @user = User.find(params[:id])
-
+    #user = User.find_by_name(params[:name])
+    debugger
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if @user and @user.authenticate(params[:current_password]) and @user.update_attributes(params[:user])
         format.html { redirect_to users_url,
-         notice: 'User #{@user.name} was successfully updated.' }
+         notice: "User #{@user.name} was successfully updated." }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        flash[:alert] = "Invalid user/password combination"
+        format.html { render action: "edit"}
         format.json { render json: @user.errors, status: :unprocessable_entity }
+
       end
     end
   end
@@ -75,7 +79,12 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
+    begin
+      @user.destroy
+      flash[:notice] = "User #{@user.name} deleted"
+    rescue Exception => e
+      flash[:notice] = e.message
+    end
 
     respond_to do |format|
       format.html { redirect_to users_url }
