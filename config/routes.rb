@@ -4,34 +4,26 @@ AgileDevelopment::Application.routes.draw do
 
   controller :sessions do 
     get "login" => :new
-
     post "login" => :create
-
     delete "logout" => :destroy
   end
 
-  resources :users
-
-  resources :orders
-
-  resources :line_items do
-    put "decrement" , on: :member
-
-  end
-
-  resources :carts
-
-  get "store/index"
-
-  resources :products do 
-    get :who_bought, on: :member
+  scope '(:locale)' do
+    resources :users
+    resources :orders
+    resources :line_items do
+      put "decrement" , on: :member
+    end
+    resources :carts
+    resources :products do 
+      get :who_bought, on: :member
+    end
   end
 
   get "/says/hello"
 
-  get "says/goodbye"
-  
-
+  get "says/goodbye"  
+ 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

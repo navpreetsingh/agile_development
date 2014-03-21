@@ -1,9 +1,10 @@
-if ($("#cart tr").length == 2) {	
-	$('#cart tr').not('.total_line').remove();
-	$('#cart').hide('blind', 1000);
-}
-
 $("#cart").html("<%=j render @cart%>");
 
 $("#current_item").css({'background-color':'#88ff88'}).
 animate({backgroundColor:"#114411"}, 1000);
+
+if ($("#cart tr").length == 1 ) {	
+	$('#cart tr').not('.total_line').remove();
+	$('#cart').hide('blind', 1000);
+}
+

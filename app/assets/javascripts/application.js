@@ -17,7 +17,7 @@
 
 $(document).ready(function(){
 	var url = window.location.pathname;
-	if (url.search("orders") == 1){
+	if (url.search("orders") >= 1){
 		$("#checkout").attr("disabled", "disabled");
 	}
 	else {

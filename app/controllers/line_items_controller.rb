@@ -2,7 +2,7 @@ class LineItemsController < ApplicationController
   # GET /line_items
   # GET /line_items.json
 
-  skip_before_filter :authorize, only: :create
+  skip_before_filter :authorize, only: [:create, :decrement]
 
   def index
     @line_items = LineItem.all
@@ -96,12 +96,12 @@ class LineItemsController < ApplicationController
   end
 
   def decrement
+    
     @cart = current_cart
     item = LineItem.find(params[:id])
-    @line_item = @cart.decrement_product(item)    
-    
+    @line_item = @cart.decrement_product(item)        
     respond_to do |format|
-      if @line_item.save
+      if @line_item.save        
         format.html { redirect_to store_url }
         format.js { @current_item = @line_item }
         format.json { head :no_content }
