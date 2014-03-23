@@ -4,11 +4,12 @@ gem 'rails', '3.2.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-gem 'sqlite3', '1.3.8'
-gem "mysql", '2.8.1' 
-# gem "mysql2", '0.2.18'
-#gem 'activerecord-sqlite3-adapter'
+group :development do
+	gem 'sqlite3', '1.3.8'
+	gem "mysql", '2.8.1' 
+	# gem "mysql2", '0.2.18'
+	#gem 'activerecord-sqlite3-adapter'
+end
 
 
 # Gems used only for assets and not required
@@ -18,7 +19,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', :platform => :ruby
+  gem 'therubyracer', :platform => :ruby
 
   gem 'uglifier', '2.1.1'
 end
@@ -42,3 +43,8 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'debugger'
 
 gem "will_paginate", '~> 3.0'
+
+group :production do
+	gem 'pg', '0.15.1'
+	gem 'rails_12factor', '0.0.2'
+end

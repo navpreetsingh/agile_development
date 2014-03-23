@@ -24,7 +24,7 @@ $(document).ready(function(){
 		$("#checkout").removeAttr("disabled");
 	}
 
-	$("#order_ship_date").datepicker({
+	$("#order_ship_date").datepicker({		
 		dateFormat: "yy-mm-dd",
 		beforeShow: function(input, inst){
 			setTimeout(function(){

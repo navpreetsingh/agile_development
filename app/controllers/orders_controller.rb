@@ -52,13 +52,13 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(params[:order])
     @order.add_line_items_from_cart(current_cart)
-    @order.ship_date = @order.ship_date.to_date
+    @order.ship_date = @order.ship_date.to_date if @order.ship_date
     respond_to do |format|
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
         OrderNotifier.received(@order).deliver
-        format.html { redirect_to store_url, notice: 'Thank you for your order.' }
+        format.html { redirect_to store_url, notice: I18n.t(".thnks") }
         format.json { render json: @order, status: :created, location: @order }
       else
         @cart = current_cart
