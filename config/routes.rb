@@ -1,5 +1,7 @@
 AgileDevelopment::Application.routes.draw do
   
+  resources :list_to_dos
+
   get "admin" => "admin#index"
 
   controller :sessions do 

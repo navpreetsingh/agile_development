@@ -1,0 +1,21 @@
+<%= form_for(@list_to_do, remote: true) do |f| %>
+  <% if @list_to_do.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@list_to_do.errors.count, "error") %> prohibited this list_to_do from being saved:</h2>
+
+      <ul>
+      <% @list_to_do.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :task %><br />
+    <%= f.text_field :task %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

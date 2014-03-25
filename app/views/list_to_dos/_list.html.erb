@@ -1,0 +1,20 @@
+
+<div class="list">
+	<table>
+  <tr>
+    <th>Task</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+	<% ListToDo.all.each do |list_to_do| %>
+	  <tr>
+	    <td><%= list_to_do.task %></td>
+	    
+	    <td><%= link_to 'Edit', edit_list_to_do_path(list_to_do), remote: true %></td>
+	    <td><%= link_to 'Destroy', list_to_do, method: :delete, remote: true %></td>
+	  </tr>
+	<% end %>
+</table>
+</div>

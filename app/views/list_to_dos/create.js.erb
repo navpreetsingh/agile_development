@@ -1,0 +1,12 @@
+$("#notice").hide();
+
+if ($(".list tr").length == 1) {
+	$(".list").show("blind", 1000);
+}
+
+
+
+$(".list").html("<%=j render 'list'%>");
+
+// $("#current_item").css({'background-color':'#88ff88'}).
+// animate({backgroundColor:"#114411"}, 1000);

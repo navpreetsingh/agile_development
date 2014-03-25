@@ -10,7 +10,7 @@ development:
   database: agile_development
   pool: 5
   username: root
-  password: s8187u610
+  password: S*!897u610
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -23,7 +23,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: agile_production
   pool: 5
-  timeout: 5000
+  username: root
+  password: S*!897u610
+  host: localhost

@@ -1,0 +1,7 @@
+$("#notice").hide();
+
+$(".list").html("<%=j render 'list'%>");
+
+if ($(".list tr").length == 1) {
+	$(".list").hide("blind", 1000);
+}
