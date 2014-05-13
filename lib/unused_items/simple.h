@@ -59,6 +59,8 @@ private:
     // The moving average periods
     int m_avgPeriod1;
     int m_avgPeriod2;
+    //int m_macd1;
+    //int m_macd2;
 
    
     // The user interface

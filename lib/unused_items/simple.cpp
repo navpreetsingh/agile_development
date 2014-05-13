@@ -260,7 +260,6 @@ Simple::Simple(QWidget *parent) :
     connect(mouseUsage, SIGNAL(buttonPressed(int)), SLOT(onMouseUsageChanged(int)));
     
     // Use the same action hanlder for all controls
-
     const QObjectList &allControls = leftPanel->children();
     for (int i = 0; i < allControls.count(); ++i)
     {
@@ -285,10 +284,6 @@ Simple::Simple(QWidget *parent) :
 
     // Update the chart
     drawChart(m_ChartViewer);
-
-    //
-    // Initialize the chart
-    //
         
     // Initialize the QChartViewer
     initChartViewer(m_ChartViewer);
@@ -514,26 +509,22 @@ void Simple::onMouseWheelChart(QWheelEvent *event)
 void Simple::simple(MultiChart *m, int mouseX)
 {
     cout << "simple: \n";
-    //cout << "mouseX" << mouseX << "\n";
+    
     // Clear the current dynamic layer and get the DrawArea object to draw on it.
     DrawArea *d = m->initDynamicLayer();
 
     // It is possible for a FinanceChart to be empty, so we need to check for it.
     if (m->getChartCount() == 0)
         return ;
-	//cout << "Chart count: " << m->getChartCount() << "\n" ;
+
     // Get the data x-value that is nearest to the mouse
     int xValue = (int)(((XYChart *)m->getChart(0))->getNearestXValue(mouseX));//layer
-    //cout << "(XYChart *)m->getChart(0): " << (XYChart *)m->getChart(0) << "\n";
-    //cout << "xValue: " << xValue << "\n";
-	//cout << "xValue: " << xValue << "\n";
+
     // Iterate the XY charts (main price chart and indicator charts) in the FinanceChart
     XYChart *c = 0;
     for(int i = 0; i < m->getChartCount(); ++i) 
-    {
-        //cout << "IIIIiiii" << i << "\n";
-        c = (XYChart *)m->getChart(i);
-        //cout << "XYCHART: " << c << "\n";
+    {       
+        c = (XYChart *)m->getChart(i);   
 
         // Variables to hold the legend entries
         ostringstream ohlcLegend;
@@ -542,28 +533,18 @@ void Simple::simple(MultiChart *m, int mouseX)
         // Iterate through all layers to find the highest data point
         for(int j = 0; j < c->getLayerCount(); ++j) 
         {
-            //cout << "JJJJjjjj" << j << "\n";
-            //cout << "layer count: " << c->getLayerCount() << "\n";
-            Layer *layer = c->getLayerByZ(j);
-            //cout << "Layer: " << layer << "\n";
-            int xIndex = layer->getXIndexOf(xValue);
-            //cout << "xIndex: " << xIndex << "\n";
-            int dataSetCount = layer->getDataSetCount();
-            //cout << "data set count: " << dataSetCount << "\n";
+            Layer *layer = c->getLayerByZ(j);            
+            int xIndex = layer->getXIndexOf(xValue);            
+            int dataSetCount = layer->getDataSetCount();            
 
             // In a FinanceChart, only layers showing OHLC data can have 4 data sets
             if (dataSetCount == 4) 
             {
-                double highValue = layer->getDataSet(0)->getValue(xIndex);
-                //cout << "high: " << highValue << "\n";
-                double lowValue = layer->getDataSet(1)->getValue(xIndex);
-                //cout << "low: " << lowValue << "\n";
-                double openValue = layer->getDataSet(2)->getValue(xIndex);
-                //cout << "open: " << openValue << "\n";
+                double highValue = layer->getDataSet(0)->getValue(xIndex);                
+                double lowValue = layer->getDataSet(1)->getValue(xIndex);                
+                double openValue = layer->getDataSet(2)->getValue(xIndex);                
                 double closeValue = layer->getDataSet(3)->getValue(xIndex);
-                //cout << "close: " << closeValue << "\n";
-				
-				//cout << "Chart noValue: " << Chart::NoValue << "\n";
+                			
                 if (closeValue != Chart::NoValue) 
                 {
                     // Build the OHLC legend
@@ -572,27 +553,19 @@ void Simple::simple(MultiChart *m, int mouseX)
 					ohlcLegend << ", High: " << c->formatValue(highValue, "{value|P4}"); 
 					ohlcLegend << ", Low: " << c->formatValue(lowValue, "{value|P4}"); 
 					ohlcLegend << ", Close: " << c->formatValue(closeValue, "{value|P4}");
-					//cout << "Display open: " << c->formatValue(openValue, "{value|P4}") << "\n";
-					//cout << "Display high: " << c->formatValue(highValue, "{value|P4}") << "\n";
-					//cout << "Display low: " << c->formatValue(lowValue, "{value|P4}") << "\n";
-					//cout << "Display close: " << c->formatValue(closeValue, "{value|P4}") << "\n";
-					
+
                     // We also draw an upward or downward triangle for up and down days and the %
                     // change
-                    double lastCloseValue = layer->getDataSet(3)->getValue(xIndex - 1);
-                    //cout << "Last Close Value: " << lastCloseValue << "\n";
+                    double lastCloseValue = layer->getDataSet(3)->getValue(xIndex - 1);                    
                     if (lastCloseValue != Chart::NoValue) 
                     {
                         double change = closeValue - lastCloseValue;
-                        //double percent = change * 100 / closeValue;
-                        //cout << "Percent" << percent << "\n";
                         string symbol = (change >= 0) ?
                             "<*font,color=008800*><*img=@triangle,width=8,color=008800*>" :
                             "<*font,color=CC0000*><*img=@invertedtriangle,width=8,color=CC0000*>";
 
                         ohlcLegend << "  " << symbol << " " << c->formatValue(change, "{value|P4}");
                     }
-
 					ohlcLegend << "<*/*>";
                 }
             } 
@@ -602,12 +575,8 @@ void Simple::simple(MultiChart *m, int mouseX)
                 for(int k = 0; k < layer->getDataSetCount(); ++k)
                 {
                     DataSet *dataSet = layer->getDataSetByZ(k);
-					//cout << "Dataset by Z: " << dataset << "\n";
                     string name = dataSet->getDataName();
-                    //cout << "Dataset Name: " << name << "\n";
                     double value = dataSet->getValue(xIndex);
-                    //cout << "Data set Value: " << value << "\n";
-                    //cout << "name size: " << name.size() << "\n";
                     if ((0 != name.size()) && (value != Chart::NoValue)) 
                     {
                         // In a FinanceChart, the data set name consists of the indicator name and its
@@ -616,23 +585,17 @@ void Simple::simple(MultiChart *m, int mouseX)
                         // out, and also the volume unit (if any).
 
 						// The volume unit
-						string unitChar;
-						//cout << "unit char: " << unitChar << "\n";
+						string unitChar;						
 
                         // The indicator name is the part of the name up to the colon character.
 						int delimiterPosition = (int)name.find(':');
-						//cout << "delimiter position " << delimiterPosition << "\n";
-						//cout << "name nPOS: " << name.npos << "\n";
                         if ((int)name.npos != delimiterPosition) 
                         {							
 							// The unit, if any, is the trailing non-digit character(s).
-							int lastDigitPos = (int)name.find_last_of("0123456789");
-							//cout << "Last digit position: " << lastDigitPos << "\n";
+							int lastDigitPos = (int)name.find_last_of("0123456789");							
                             if (((int)name.npos != lastDigitPos) && (lastDigitPos + 1 < (int)name.size())
                                 && (lastDigitPos > delimiterPosition))
 								unitChar = name.substr(lastDigitPos + 1);
-								//cout << "unit char 2: " << unitChar << "\n";
-
 							name.resize(delimiterPosition);
                         }
 
@@ -641,10 +604,8 @@ void Simple::simple(MultiChart *m, int mouseX)
                         if (dataSetCount == 2) 
                         {
                             // We show both values in the range in a single legend entry
-                            value = layer->getDataSet(0)->getValue(xIndex);
-                            //cout << "value22: " << value << "\n";
-                            double value2 = layer->getDataSet(1)->getValue(xIndex);
-                            //cout << "value2: " << value2 << "\n";
+                            value = layer->getDataSet(0)->getValue(xIndex);                            
+                            double value2 = layer->getDataSet(1)->getValue(xIndex);                            
                             name = name + ": " + c->formatValue(min(value, value2), "{value|P3}");
 							name = name + " - " + c->formatValue(max(value, value2), "{value|P3}");
                         } 
@@ -657,23 +618,17 @@ void Simple::simple(MultiChart *m, int mouseX)
                                 // The actual volume is the sum of the 3 data sets.
                                 value = layer->getDataSet(0)->getValue(xIndex) + layer->getDataSet(1
                                     )->getValue(xIndex) + layer->getDataSet(2)->getValue(xIndex);
-                                //cout << "value in if1: " << value << "\n";
-                                //cout << "layer->getDataSet(0)->getValue(xIndex): " << layer->getDataSet(0)->getValue(xIndex) << "\n";
-                                //cout << "layer->getDataSet(1)->getValue(xIndex): " << layer->getDataSet(1)->getValue(xIndex) << "\n";
-                                //cout << "layer->getDataSet(2)->getValue(xIndex): " << layer->getDataSet(1)->getValue(xIndex) << "\n";                                    
-                            }
+                                }
 
                             // Create the legend entry
-                            name = name + ": " + c->formatValue(value, "{value|P3}") + unitChar;
-                            //cout << "name legend entry: " << name << "\n";
+                            name = name + ": " + c->formatValue(value, "{value|P3}") + unitChar;                            
                         }
 
                         // Build the legend entry, consist of a colored square box and the name (with
                         // the data value in it).
 						ostringstream legendEntry;
 						legendEntry << "<*block*><*img=@square,width=8,edgeColor=000000,color=" 
-							<< hex << dataSet->getDataColor() << "*> " << name << "<*/*>";
-						//cout << "legend Entry: " << legendEntry << "\n";	
+							<< hex << dataSet->getDataColor() << "*> " << name << "<*/*>";						
                         legendEntries.push_back(legendEntry.str());
                     }
                 }
@@ -1023,10 +978,7 @@ void Simple::drawChart(QChartViewer *viewer)
 
     // Set the chart to the viewer
     viewer->setChart(m);
-
-    /*// Set image map (for tool tips) to the viewer
-    sprintf(buffer, "title='%s {value|P}'", m.getToolTipDateFormat());
-    viewer->setImageMap(m.getHTMLImageMap("", "", buffer));*/
+    
 }
 
 void Simple::read_data(int durationOfStock)
@@ -1039,26 +991,20 @@ void Simple::read_data(int durationOfStock)
         Query query = conn.query();     
        
         char *s = m_TickerSymbol->text().toLocal8Bit().data();
-        cout << "Duration: " << durationOfStock << "\n";
+        
         /* Now SELECT */             
         switch(durationOfStock)
         {
-            case 1:
-                cout << "CASE 1 \n";
+            case 1:                
                 query << "SELECT date, open, high, low, close, volume from stocks_details WHERE stock_id = (SELECT id from stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";
                 break;
-            case 7:
-                cout << "CASE 7 \" \n";
+            case 7:                
                 query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `stocks_details` WHERE stock_id = (SELECT id from stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
                 break;
-            case 30:
-                cout << "CASE 30 \n";
+            case 30:                
                 query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `stocks_details` WHERE stock_id = (SELECT id from stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
 
-        }
-                
-        
-        
+        }        
         StoreQueryResult ares = query.store();
         if (ares.num_rows() == 0)
         {
@@ -1081,42 +1027,18 @@ void Simple::read_data(int durationOfStock)
             high[i] = ares[i]["high"];
             low[i] = ares[i]["low"];
             close[i] = atof(ares[i]["close"]);
-            volume[i] = ares[i]["volume"];
-
-            /*cc++; 
-
-            cout << "date: " <<tm1.tm_year << "-" << tm1.tm_mon << "-" << tm1.tm_mday <<"\n";
-            cout << "Date: " << date[i] << "  "            
-                 << "Open: " << open[i] << "  " 
-                 << "High: " << high[i] << "  "
-                 << "Low: " << low[i] << "  "
-                 << "Close: " << close[i] << "  "
-                 << "Volume: " << volume[i] << "\n";
-             
-             std::cout << "date is of type: " << typeid(date[i]).name() << "   "
-                       << "open is of type: " << typeid(open[i]).name() << "   "
-                       << "high is of type: " << typeid(high[i]).name() << "   "
-                       << "low is of type: " << typeid(low[i]).name() << "   "
-                       << "close is of type: " << typeid(close[i]).name() << "   "
-                       << "volume is of type: " << typeid(volume[i]).name() << "   "
-                     <<std::endl;      */                 
+            volume[i] = ares[i]["volume"];  
         }        
-        /*cout << "data len:" << data_len << "\n";
-        cout << "CC: " << cc << "\n";
-        cout << "First Date: " << date[0] << " Last Date: " << date [data_len] << "\n";*/
     } catch (BadQuery er) { // handle any connection or
-        // query errors that may come up
-        cout << "BAD QUERY 1" << "\n";
+        // query errors that may come up        
         cerr << "Error: " << er.what() << endl;        
     } catch (const BadConversion& er) {
-        // Handle bad conversions
-        cout << "BAD QUERY 2" << "\n";
+        // Handle bad conversions        
         cerr << "Conversion error: " << er.what() << endl <<
                 "\tretrieved data size: " << er.retrieved <<
                 ", actual size: " << er.actual_size << endl;        
     } catch (const Exception& er) {
-        // Catch-all for any other MySQL++ exceptions
-        cout << "BAD QUERY 3" << "\n";
+        // Catch-all for any other MySQL++ exceptions        
         cerr << "Error: " << er.what() << endl;        
     } 
 
@@ -1133,7 +1055,19 @@ void Simple::read_data_compare(int durationOfStock)
         char *s =  m_CompareWith ->text().toLocal8Bit().data();
         
         /* Now SELECT */            
-        query << "SELECT date, open, close, high, low, volume FROM stocks_details LEFT JOIN stocks on stocks_details.stock_id = stocks.id where stocks.stock_name=" << quote_only << s ;
+        switch(durationOfStock)
+        {
+            case 1:                
+                query << "SELECT date, open, high, low, close, volume from stocks_details WHERE stock_id = (SELECT id from stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";
+                break;
+            case 7:                
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `stocks_details` WHERE stock_id = (SELECT id from stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
+                break;
+            case 30:                
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `stocks_details` WHERE stock_id = (SELECT id from stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
+
+        }
+
         StoreQueryResult ares = query.store();
         if (ares.num_rows() == 0)
         {
@@ -1150,17 +1084,14 @@ void Simple::read_data_compare(int durationOfStock)
         }        
     } catch (BadQuery er) { // handle any connection or
         // query errors that may come up
-        cout << "BAD QUERY 1" << "\n";
         cerr << "Error: " << er.what() << endl;        
     } catch (const BadConversion& er) {
-        // Handle bad conversions
-        cout << "BAD QUERY 2" << "\n";
+        // Handle bad conversions        
         cerr << "Conversion error: " << er.what() << endl <<
                 "\tretrieved data size: " << er.retrieved <<
                 ", actual size: " << er.actual_size << endl;        
     } catch (const Exception& er) {
-        // Catch-all for any other MySQL++ exceptions
-        cout << "BAD QUERY 3" << "\n";
+        // Catch-all for any other MySQL++ exceptions        
         cerr << "Error: " << er.what() << endl;        
     } 
 }
