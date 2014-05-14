@@ -126,14 +126,41 @@ Simple::Simple(QWidget *parent) :
 
     // Technical Indicators
     (new QLabel("Technical Indicators", leftPanel))->setGeometry(8, 409, 140, 18);
-    m_Indicator1 = new QComboBox(leftPanel);
+    m_Indicator1 = new QComboBox(leftPanel);    
     m_Indicator2 = new QComboBox(leftPanel);
     m_Indicator3 = new QComboBox(leftPanel);
     m_Indicator4 = new QComboBox(leftPanel);
     m_Indicator1->setGeometry(8, 425, 140, 20);
-    m_Indicator2->setGeometry(8, 446, 140, 20);
-    m_Indicator3->setGeometry(8, 467, 140, 20);
-    m_Indicator4->setGeometry(8, 488, 140, 20);
+    m_Indicator2->setGeometry(8, 475, 140, 20);
+    m_Indicator3->setGeometry(8, 525, 140, 20);
+    m_Indicator4->setGeometry(8, 575, 140, 20);
+
+    //Technical Indicators periods
+    m_Indicator1_pd1 = new QLineEdit("26", leftPanel);
+    m_Indicator1_pd2 = new QLineEdit("12", leftPanel);
+    m_Indicator1_pd3 = new QLineEdit("9", leftPanel);
+    m_Indicator2_pd1 = new QLineEdit("26", leftPanel);
+    m_Indicator2_pd2 = new QLineEdit("12", leftPanel);
+    m_Indicator2_pd3 = new QLineEdit("9", leftPanel);
+    m_Indicator3_pd1 = new QLineEdit("26", leftPanel);
+    m_Indicator3_pd2 = new QLineEdit("12", leftPanel);
+    m_Indicator3_pd3 = new QLineEdit("9", leftPanel);
+    m_Indicator4_pd1 = new QLineEdit("26", leftPanel);
+    m_Indicator4_pd2 = new QLineEdit("12", leftPanel);
+    m_Indicator4_pd3 = new QLineEdit("9", leftPanel);
+
+    m_Indicator1_pd1->setGeometry(8,445,35,20);
+    m_Indicator1_pd2->setGeometry(58,445,35,20);
+    m_Indicator1_pd3->setGeometry(108,445,35,20);
+    m_Indicator2_pd1->setGeometry(8,495,35,20);
+    m_Indicator2_pd2->setGeometry(58,495,35,20);
+    m_Indicator2_pd3->setGeometry(108,495,35,20);
+    m_Indicator3_pd1->setGeometry(8,545,35,20);
+    m_Indicator3_pd2->setGeometry(58,545,35,20);
+    m_Indicator3_pd3->setGeometry(108,545,35,20);
+    m_Indicator4_pd1->setGeometry(8,595,35,20);
+    m_Indicator4_pd2->setGeometry(58,595,35,20);
+    m_Indicator4_pd3->setGeometry(108,595,35,20);
 
     QFont labelFont(defaultFont);
     labelFont.setBold(true);
@@ -347,26 +374,32 @@ void Simple::onLineEditChanged()
 {
     cout << "onLineEditChanged \n";
 
-    int new_avgPeriod1 = m_MovAvg1->text().toInt();
-    int new_avgPeriod2 = m_MovAvg2->text().toInt();
+    /*int new_avgPeriod1 = m_MovAvg1->text().toInt();
+    int new_avgPeriod2 = m_MovAvg2->text().toInt();*/
 
     QString tickerKey = m_TickerSymbol->text();
     
     QString compareKey = m_CompareWith->text();
 
-    if (m_tickerKey != tickerKey) 
+    if (m_tickerKey != tickerKey)
+    {
+        m_tickerKey = m_TickerSymbol->text();
         read_data(m_duration);
+    } 
+        
 
     if (m_compareKey != compareKey)
-        read_data_compare(m_duration);
-
-    if ((new_avgPeriod1 != m_avgPeriod1) || (new_avgPeriod2 != m_avgPeriod2) ||
-        (m_tickerKey != tickerKey) || (m_compareKey != compareKey))
     {
-         m_tickerKey = m_TickerSymbol->text();
-         m_compareKey =  m_CompareWith ->text();
-         drawChart(m_ChartViewer);
+        m_compareKey =  m_CompareWith ->text();
+        read_data_compare(m_duration);
     }
+       
+
+    /*if ((new_avgPeriod1 != m_avgPeriod1) || (new_avgPeriod2 != m_avgPeriod2) ||
+        (m_tickerKey != tickerKey) || (m_compareKey != compareKey))
+    { */      
+    drawChart(m_ChartViewer);
+    //}
         
 }
 
@@ -704,37 +737,38 @@ static LineLayer* addMovingAvg(FinanceChart *m, QString avgType, int avgPeriod, 
 /// <param name="m">The FinanceChart object to add the line to.</param>
 /// <param name="indicator">The selected indicator.</param>
 /// <param name="height">Height of the chart in pixels</param>
-static XYChart* addIndicator(FinanceChart *m, QString indicator, int height)
+static XYChart* addIndicator(FinanceChart *m, QString indicator, int height,
+    int p1, int p2, int p3)
 {
     cout << "addIndicator \n";
     if (indicator == "RSI")
-        return m->addRSI(height, 14, 0x800080, 20, 0xff6666, 0x6666ff);
+        return m->addRSI(height, p1, 0x800080, p2, 0xff6666, 0x6666ff);
     else if (indicator == "StochRSI")
-        return m->addStochRSI(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+        return m->addStochRSI(height, p1, 0x800080, p2, 0xff6666, 0x6666ff);
     else if (indicator == "MACD")
-        return m->addMACD(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+        return m->addMACD(height, p1, p2, p3, 0xff, 0xff00ff, 0x8000);
     else if (indicator == "FStoch")
-        return m->addFastStochastic(height, 14, 3, 0x6060, 0x606000);
+        return m->addFastStochastic(height, p1, p2, 0x6060, 0x606000);
     else if (indicator == "SStoch")
-        return m->addSlowStochastic(height, 14, 3, 0x6060, 0x606000);
+        return m->addSlowStochastic(height, p1, p2, 0x6060, 0x606000);
     else if (indicator == "ATR")
-        return m->addATR(height, 14, 0x808080, 0xff);
+        return m->addATR(height, p1, 0x808080, 0xff);
     else if (indicator == "ADX")
-        return m->addADX(height, 14, 0x8000, 0x800000, 0x80);
+        return m->addADX(height, p1, 0x8000, 0x800000, 0x80);
     else if (indicator == "DCW")
-        return m->addDonchianWidth(height, 20, 0xff);
+        return m->addDonchianWidth(height, p1, 0xff);
     else if (indicator == "BBW")
-        return m->addBollingerWidth(height, 20, 2, 0xff);
+        return m->addBollingerWidth(height, p1, p2, 0xff);
     else if (indicator == "DPO")
-        return m->addDPO(height, 20, 0xff);
+        return m->addDPO(height, p1, 0xff);
     else if (indicator == "PVT")
         return m->addPVT(height, 0xff);
     else if (indicator == "Momentum")
-        return m->addMomentum(height, 12, 0xff);
+        return m->addMomentum(height, p1, 0xff);
     else if (indicator == "Performance")
         return m->addPerformance(height, 0xff);
     else if (indicator == "ROC")
-        return m->addROC(height, 12, 0xff);
+        return m->addROC(height, p1, 0xff);
     else if (indicator == "OBV")
         return m->addOBV(height, 0xff);
     else if (indicator == "AccDist")
@@ -742,39 +776,39 @@ static XYChart* addIndicator(FinanceChart *m, QString indicator, int height)
     else if (indicator == "CLV")
         return m->addCLV(height, 0xff);
     else if (indicator == "WilliamR")
-        return m->addWilliamR(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+        return m->addWilliamR(height, p1, 0x800080, p2, 0xff6666, 0x6666ff);
     else if (indicator == "Aroon")
-        return m->addAroon(height, 14, 0x339933, 0x333399);
+        return m->addAroon(height, p1, 0x339933, 0x333399);
     else if (indicator == "AroonOsc")
-        return m->addAroonOsc(height, 14, 0xff);
+        return m->addAroonOsc(height, p1, 0xff);
     else if (indicator == "CCI")
-        return m->addCCI(height, 20, 0x800080, 100, 0xff6666, 0x6666ff);
+        return m->addCCI(height, p1, 0x800080, p2, 0xff6666, 0x6666ff);
     else if (indicator == "EMV")
-        return m->addEaseOfMovement(height, 9, 0x6060, 0x606000);
+        return m->addEaseOfMovement(height, p1, 0x6060, 0x606000);
     else if (indicator == "MDX")
         return m->addMassIndex(height, 0x800080, 0xff6666, 0x6666ff);
     else if (indicator == "CVolatility")
-        return m->addChaikinVolatility(height, 10, 10, 0xff);
+        return m->addChaikinVolatility(height, p1, p2, 0xff);
     else if (indicator == "COscillator")
         return m->addChaikinOscillator(height, 0xff);
     else if (indicator == "CMF")
-        return m->addChaikinMoneyFlow(height, 21, 0x8000);
+        return m->addChaikinMoneyFlow(height, p1, 0x8000);
     else if (indicator == "NVI")
-        return m->addNVI(height, 255, 0xff, 0x883333);
+        return m->addNVI(height, p1, 0xff, 0x883333);
     else if (indicator == "PVI")
-        return m->addPVI(height, 255, 0xff, 0x883333);
+        return m->addPVI(height, p1, 0xff, 0x883333);
     else if (indicator == "MFI")
-        return m->addMFI(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+        return m->addMFI(height, p1, 0x800080, p2, 0xff6666, 0x6666ff);
     else if (indicator == "PVO")
-        return m->addPVO(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+        return m->addPVO(height, p1, p2, p3, 0xff, 0xff00ff, 0x8000);
     else if (indicator == "PPO")
-        return m->addPPO(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+        return m->addPPO(height, p1, p2, p3, 0xff, 0xff00ff, 0x8000);
     else if (indicator == "UO")
-        return m->addUltimateOscillator(height, 7, 14, 28, 0x800080, 20, 0xff6666, 0x6666ff);
+        return m->addUltimateOscillator(height, p1, p2, p3, 0x800080, 20, 0xff6666, 0x6666ff);
     else if (indicator == "Vol")
         return m->addVolIndicator(height, 0x99ff99, 0xff9999, 0xc0c0c0);
     else if (indicator == "TRIX")
-        return m->addTRIX(height, 12, 0xff);
+        return m->addTRIX(height, p1, 0xff);
     else
         return 0;
 }
@@ -814,6 +848,24 @@ void Simple::drawChart(QChartViewer *viewer)
         m_avgPeriod2 = 0;
     if (m_avgPeriod2 > 300)
         m_avgPeriod2 = 300;
+
+    m_indicator1_p1 = m_Indicator1_pd1->text().toInt();
+    m_indicator1_p2 = m_Indicator1_pd2->text().toInt();
+    m_indicator1_p3 = m_Indicator1_pd3->text().toInt();
+
+    m_indicator2_p1 = m_Indicator2_pd1->text().toInt();
+    m_indicator2_p2 = m_Indicator2_pd2->text().toInt();
+    m_indicator2_p3 = m_Indicator2_pd3->text().toInt();
+
+
+    m_indicator3_p1 = m_Indicator3_pd1->text().toInt();
+    m_indicator3_p2 = m_Indicator3_pd2->text().toInt();
+    m_indicator3_p3 = m_Indicator3_pd3->text().toInt();
+
+
+    m_indicator4_p1 = m_Indicator4_pd1->text().toInt();
+    m_indicator4_p2 = m_Indicator4_pd2->text().toInt();
+    m_indicator4_p3 = m_Indicator4_pd3->text().toInt();
 
     // We need extra leading data points in order to compute moving averages.
     int extraPoints = (m_avgPeriod1 > m_avgPeriod2) ? m_avgPeriod1 : m_avgPeriod2;
@@ -881,7 +933,7 @@ void Simple::drawChart(QChartViewer *viewer)
     // indicator on top of the main chart.
     //
     addIndicator(m, m_Indicator1->itemData(m_Indicator1->currentIndex()).toString(),
-                 indicatorHeight);
+                 indicatorHeight, m_indicator1_p1, m_indicator1_p2, m_indicator1_p3);
 
         //
     // Add the main chart
@@ -967,11 +1019,11 @@ void Simple::drawChart(QChartViewer *viewer)
     // Add additional indicators as according to user selection.
     //
     addIndicator(m, m_Indicator2->itemData(m_Indicator2->currentIndex()).toString(),
-                 indicatorHeight);
+                 indicatorHeight, m_indicator2_p1, m_indicator2_p2, m_indicator2_p3);
     addIndicator(m, m_Indicator3->itemData(m_Indicator3->currentIndex()).toString(),
-                 indicatorHeight);
+                 indicatorHeight, m_indicator3_p1, m_indicator3_p2, m_indicator3_p3);
     addIndicator(m, m_Indicator4->itemData(m_Indicator4->currentIndex()).toString(),
-                 indicatorHeight);
+                 indicatorHeight, m_indicator4_p1, m_indicator4_p2, m_indicator4_p3);
 
     // Include track line with legend for the latest data values
     simple(m, ((XYChart *)m->getChart(0))->getPlotArea()->getRightX());

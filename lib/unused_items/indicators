@@ -1,0 +1,70 @@
+if (indicator == "RSI")
+        return m->addRSI(height, 14, 0x800080, 20, 0xff6666, 0x6666ff);
+    else if (indicator == "StochRSI")
+        return m->addStochRSI(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+    else if (indicator == "MACD")
+        return m->addMACD(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+    else if (indicator == "FStoch")
+        return m->addFastStochastic(height, 14, 3, 0x6060, 0x606000);
+    else if (indicator == "SStoch")
+        return m->addSlowStochastic(height, 14, 3, 0x6060, 0x606000);
+    else if (indicator == "ATR")
+        return m->addATR(height, 14, 0x808080, 0xff);
+    else if (indicator == "ADX")
+        return m->addADX(height, 14, 0x8000, 0x800000, 0x80);
+    else if (indicator == "DCW")
+        return m->addDonchianWidth(height, 20, 0xff);
+    else if (indicator == "BBW")
+        return m->addBollingerWidth(height, 20, 2, 0xff);
+    else if (indicator == "DPO")
+        return m->addDPO(height, 20, 0xff);
+    else if (indicator == "PVT")
+        return m->addPVT(height, 0xff);
+    else if (indicator == "Momentum")
+        return m->addMomentum(height, 12, 0xff);
+    else if (indicator == "Performance")
+        return m->addPerformance(height, 0xff);
+    else if (indicator == "ROC")
+        return m->addROC(height, 12, 0xff);
+    else if (indicator == "OBV")
+        return m->addOBV(height, 0xff);
+    else if (indicator == "AccDist")
+        return m->addAccDist(height, 0xff);
+    else if (indicator == "CLV")
+        return m->addCLV(height, 0xff);
+    else if (indicator == "WilliamR")
+        return m->addWilliamR(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+    else if (indicator == "Aroon")
+        return m->addAroon(height, 14, 0x339933, 0x333399);
+    else if (indicator == "AroonOsc")
+        return m->addAroonOsc(height, 14, 0xff);
+    else if (indicator == "CCI")
+        return m->addCCI(height, 20, 0x800080, 100, 0xff6666, 0x6666ff);
+    else if (indicator == "EMV")
+        return m->addEaseOfMovement(height, 9, 0x6060, 0x606000);
+    else if (indicator == "MDX")
+        return m->addMassIndex(height, 0x800080, 0xff6666, 0x6666ff);
+    else if (indicator == "CVolatility")
+        return m->addChaikinVolatility(height, 10, 10, 0xff);
+    else if (indicator == "COscillator")
+        return m->addChaikinOscillator(height, 0xff);
+    else if (indicator == "CMF")
+        return m->addChaikinMoneyFlow(height, 21, 0x8000);
+    else if (indicator == "NVI")
+        return m->addNVI(height, 255, 0xff, 0x883333);
+    else if (indicator == "PVI")
+        return m->addPVI(height, 255, 0xff, 0x883333);
+    else if (indicator == "MFI")
+        return m->addMFI(height, 14, 0x800080, 30, 0xff6666, 0x6666ff);
+    else if (indicator == "PVO")
+        return m->addPVO(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+    else if (indicator == "PPO")
+        return m->addPPO(height, 26, 12, 9, 0xff, 0xff00ff, 0x8000);
+    else if (indicator == "UO")
+        return m->addUltimateOscillator(height, 7, 14, 28, 0x800080, 20, 0xff6666, 0x6666ff);
+    else if (indicator == "Vol")
+        return m->addVolIndicator(height, 0x99ff99, 0xff9999, 0xc0c0c0);
+    else if (indicator == "TRIX")
+        return m->addTRIX(height, 12, 0xff);
+    else
+        return 0;

@@ -59,8 +59,20 @@ private:
     // The moving average periods
     int m_avgPeriod1;
     int m_avgPeriod2;
-    //int m_macd1;
-    //int m_macd2;
+
+    //The moving average periods of indicators
+    int m_indicator1_p1;
+    int m_indicator1_p2;
+    int m_indicator1_p3;    
+    int m_indicator2_p1;
+    int m_indicator2_p2;
+    int m_indicator2_p3;    
+    int m_indicator3_p1;
+    int m_indicator3_p2;
+    int m_indicator3_p3;
+    int m_indicator4_p1;
+    int m_indicator4_p2;
+    int m_indicator4_p3;
 
    
     // The user interface
@@ -86,6 +98,18 @@ private:
     QScrollBar *m_HScrollBar;
     QDateEdit *m_StartDate;
     QDateEdit *m_EndDate;
+    QLineEdit *m_Indicator1_pd1;
+    QLineEdit *m_Indicator1_pd2;
+    QLineEdit *m_Indicator1_pd3;
+    QLineEdit *m_Indicator2_pd1;
+    QLineEdit *m_Indicator2_pd2;
+    QLineEdit *m_Indicator2_pd3;
+    QLineEdit *m_Indicator3_pd1;
+    QLineEdit *m_Indicator3_pd2;
+    QLineEdit *m_Indicator3_pd3;
+    QLineEdit *m_Indicator4_pd1;
+    QLineEdit *m_Indicator4_pd2;
+    QLineEdit *m_Indicator4_pd3;
 
     void drawChart(QChartViewer *viewer);            // Draw chart
 	void simple(MultiChart *m, int mouseX);    // Draw Track Cursor
