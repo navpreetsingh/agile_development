@@ -73,6 +73,12 @@ private:
     int m_indicator4_p1;
     int m_indicator4_p2;
     int m_indicator4_p3;
+    int m_band_period;
+    double m_band_width;
+    double m_ParabolicSAR_int;
+    double m_ParabolicSAR_inc;
+    double m_ParabolicSAR_max;
+
 
    
     // The user interface
@@ -110,6 +116,12 @@ private:
     QLineEdit *m_Indicator4_pd1;
     QLineEdit *m_Indicator4_pd2;
     QLineEdit *m_Indicator4_pd3;
+    QLineEdit *m_band_pd;
+    QLineEdit *m_band_wd;
+    QLineEdit *m_ParabolicSAR_initial;
+    QLineEdit *m_ParabolicSAR_increment;
+    QLineEdit *m_ParabolicSAR_maximum;
+
 
     void drawChart(QChartViewer *viewer);            // Draw chart
 	void simple(MultiChart *m, int mouseX);    // Draw Track Cursor

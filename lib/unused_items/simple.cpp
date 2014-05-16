@@ -95,45 +95,55 @@ Simple::Simple(QWidget *parent) :
     // Value bars/Log Scale/Grid Lines
     m_VolumeBars = new QCheckBox("Show Volume Bars", leftPanel);
     m_ParabolicSAR = new QCheckBox("Parabolic SAR", leftPanel);
+    m_ParabolicSAR_initial = new QLineEdit("0.02", leftPanel);
+    m_ParabolicSAR_increment = new QLineEdit("0.02", leftPanel);
+    m_ParabolicSAR_maximum = new QLineEdit("0.2", leftPanel);
     m_LogScale = new QCheckBox("Log Scale", leftPanel);
     m_PercentageScale = new QCheckBox("Percentage Grid", leftPanel);
     m_VolumeBars->setChecked(true);
     m_VolumeBars->setGeometry(8, 176, 140, 20);
     m_ParabolicSAR->setGeometry(8, 196, 140, 20);
-    m_LogScale->setGeometry(8, 216, 140, 20);
-    m_PercentageScale->setGeometry(8, 236, 140, 20);
+    m_ParabolicSAR_initial->setGeometry(8, 216, 35, 20);
+    m_ParabolicSAR_increment->setGeometry(58, 216, 35, 20);
+    m_ParabolicSAR_maximum->setGeometry(108, 216, 35, 20);
+    m_LogScale->setGeometry(8, 236, 140, 20);
+    m_PercentageScale->setGeometry(8, 256, 140, 20);
 
     // Chart Type
-    (new QLabel("Chart Type", leftPanel))->setGeometry(8, 262, 140, 18);
+    (new QLabel("Chart Type", leftPanel))->setGeometry(8, 282, 140, 18);
     m_ChartType = new QComboBox(leftPanel);
-    m_ChartType->setGeometry(8, 278, 140, 20);
+    m_ChartType->setGeometry(8, 298, 140, 20);
 
     // Price Bands
-    (new QLabel("Price Bands", leftPanel))->setGeometry(8, 304, 140, 18);
+    (new QLabel("Price Bands", leftPanel))->setGeometry(8, 324, 140, 18);
     m_PriceBand = new QComboBox(leftPanel);
-    m_PriceBand->setGeometry(8, 320, 140, 20);
+    m_band_pd = new QLineEdit("20", leftPanel);
+    m_band_wd =  new QLineEdit("2", leftPanel);
+    m_PriceBand->setGeometry(8, 340, 140, 20);
+    m_band_pd->setGeometry(8, 360, 35, 20);
+    m_band_wd->setGeometry(58,360,35,20);
 
     // Moving Averages
-    (new QLabel("Moving Averages", leftPanel))->setGeometry(8, 346, 140, 18);
+    (new QLabel("Moving Averages", leftPanel))->setGeometry(8, 400, 140, 18);
     m_AvgType1 = new QComboBox(leftPanel);
     m_AvgType2 = new QComboBox(leftPanel);
     m_MovAvg1 = new QLineEdit("10", leftPanel);
     m_MovAvg2 = new QLineEdit("25", leftPanel);
-    m_AvgType1->setGeometry(8, 362, 105, 20);
-    m_AvgType2->setGeometry(8, 383, 105, 20);
-    m_MovAvg1->setGeometry(113, 362, 35, 20);
-    m_MovAvg2->setGeometry(113, 383, 35, 20);
+    m_AvgType1->setGeometry(8, 420, 105, 20);
+    m_AvgType2->setGeometry(8, 440, 105, 20);
+    m_MovAvg1->setGeometry(113, 420, 35, 20);
+    m_MovAvg2->setGeometry(113, 440, 35, 20);
 
     // Technical Indicators
-    (new QLabel("Technical Indicators", leftPanel))->setGeometry(8, 409, 140, 18);
+    (new QLabel("Technical Indicators", leftPanel))->setGeometry(8, 475, 140, 18);
     m_Indicator1 = new QComboBox(leftPanel);    
     m_Indicator2 = new QComboBox(leftPanel);
     m_Indicator3 = new QComboBox(leftPanel);
     m_Indicator4 = new QComboBox(leftPanel);
-    m_Indicator1->setGeometry(8, 425, 140, 20);
-    m_Indicator2->setGeometry(8, 475, 140, 20);
-    m_Indicator3->setGeometry(8, 525, 140, 20);
-    m_Indicator4->setGeometry(8, 575, 140, 20);
+    m_Indicator1->setGeometry(8, 490, 140, 20);
+    m_Indicator2->setGeometry(8, 540, 140, 20);
+    m_Indicator3->setGeometry(8, 590, 140, 20);
+    m_Indicator4->setGeometry(8, 640, 140, 20);
 
     //Technical Indicators periods
     m_Indicator1_pd1 = new QLineEdit("26", leftPanel);
@@ -149,18 +159,18 @@ Simple::Simple(QWidget *parent) :
     m_Indicator4_pd2 = new QLineEdit("12", leftPanel);
     m_Indicator4_pd3 = new QLineEdit("9", leftPanel);
 
-    m_Indicator1_pd1->setGeometry(8,445,35,20);
-    m_Indicator1_pd2->setGeometry(58,445,35,20);
-    m_Indicator1_pd3->setGeometry(108,445,35,20);
-    m_Indicator2_pd1->setGeometry(8,495,35,20);
-    m_Indicator2_pd2->setGeometry(58,495,35,20);
-    m_Indicator2_pd3->setGeometry(108,495,35,20);
-    m_Indicator3_pd1->setGeometry(8,545,35,20);
-    m_Indicator3_pd2->setGeometry(58,545,35,20);
-    m_Indicator3_pd3->setGeometry(108,545,35,20);
-    m_Indicator4_pd1->setGeometry(8,595,35,20);
-    m_Indicator4_pd2->setGeometry(58,595,35,20);
-    m_Indicator4_pd3->setGeometry(108,595,35,20);
+    m_Indicator1_pd1->setGeometry(8, 510,35,20);
+    m_Indicator1_pd2->setGeometry(58,510,35,20);
+    m_Indicator1_pd3->setGeometry(108,510,35,20);
+    m_Indicator2_pd1->setGeometry(8,560,35,20);
+    m_Indicator2_pd2->setGeometry(58,560,35,20);
+    m_Indicator2_pd3->setGeometry(108,560,35,20);
+    m_Indicator3_pd1->setGeometry(8,610,35,20);
+    m_Indicator3_pd2->setGeometry(58,610,35,20);
+    m_Indicator3_pd3->setGeometry(108,610,35,20);
+    m_Indicator4_pd1->setGeometry(8,660,35,20);
+    m_Indicator4_pd2->setGeometry(58,660,35,20);
+    m_Indicator4_pd3->setGeometry(108,660,35,20);
 
     QFont labelFont(defaultFont);
     labelFont.setBold(true);
@@ -849,6 +859,18 @@ void Simple::drawChart(QChartViewer *viewer)
     if (m_avgPeriod2 > 300)
         m_avgPeriod2 = 300;
 
+    QString parabolic_initial = m_ParabolicSAR_initial->text();
+    QString parabolic_increment = m_ParabolicSAR_increment->text();
+    QString parabolic_max = m_ParabolicSAR_maximum->text();
+    m_ParabolicSAR_int = parabolic_initial.toDouble();
+    m_ParabolicSAR_inc = parabolic_increment.toDouble();
+    m_ParabolicSAR_max = parabolic_max.toDouble();
+
+    m_band_period = m_band_pd->text().toInt();
+    QString band_width = m_band_wd->text();
+    m_band_width = band_width.toDouble();
+
+
     m_indicator1_p1 = m_Indicator1_pd1->text().toInt();
     m_indicator1_p2 = m_Indicator1_pd2->text().toInt();
     m_indicator1_p3 = m_Indicator1_pd3->text().toInt();
@@ -996,18 +1018,19 @@ void Simple::drawChart(QChartViewer *viewer)
     // Add parabolic SAR if necessary
     //
     if (m_ParabolicSAR->isChecked())
-        m->addParabolicSAR(0.02, 0.02, 0.2, Chart::DiamondShape, 5, 0x008800, 0x000000);
+        m->addParabolicSAR(m_ParabolicSAR_int, m_ParabolicSAR_inc, m_ParabolicSAR_max, 
+            Chart::DiamondShape, 5, 0x008800, 0x000000);
 
     //
     // Add price band/channel/envelop to the chart according to user selection
     //
     QString selectedBand = m_PriceBand->itemData(m_PriceBand->currentIndex()).toString();
     if (selectedBand == "BB")
-        m->addBollingerBand(20, 2, 0x9999ff, 0xc06666ff);
+        m->addBollingerBand(m_band_period, m_band_width, 0x9999ff, 0xc06666ff);
     else if (selectedBand == "DC")
-        m->addDonchianChannel(20, 0x9999ff, 0xc06666ff);
+        m->addDonchianChannel(m_band_period, 0x9999ff, 0xc06666ff);
     else if (selectedBand == "Envelop")
-        m->addEnvelop(20, 0.1, 0x9999ff, 0xc06666ff);
+        m->addEnvelop(m_band_period, m_band_width, 0x9999ff, 0xc06666ff);
 
     //
     // Add volume bars to the main chart if necessary

@@ -68,3 +68,17 @@ if (indicator == "RSI")
         return m->addTRIX(height, 12, 0xff);
     else
         return 0;
+
+
+
+
+
+    if (selectedBand == "BB")
+        m->addBollingerBand(20, 2, 0x9999ff, 0xc06666ff);
+    else if (selectedBand == "DC")
+        m->addDonchianChannel(20, 0x9999ff, 0xc06666ff);
+    else if (selectedBand == "Envelop")
+        m->addEnvelop(20, 0.1, 0x9999ff, 0xc06666ff);
+
+
+     m->addParabolicSAR(0.02, 0.02, 0.2, Chart::DiamondShape, 5, 0x008800, 0x000000)
