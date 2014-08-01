@@ -74,7 +74,7 @@ Simple::Simple(QWidget *parent) :
 
     // Ticker Symbol
     (new QLabel("Ticker Symbol", leftPanel))->setGeometry(8, 10, 140, 18);
-    m_TickerSymbol = new QLineEdit("ABB", leftPanel);
+    m_TickerSymbol = new QLineEdit("ABAN", leftPanel);
     m_TickerSymbol->setGeometry(8, 26, 140, 20);
 
     // Compare With
@@ -839,7 +839,7 @@ void Simple::drawChart(QChartViewer *viewer)
 
     // Get the array indexes that corresponds to the visible start and end dates
     int startIndex = (int)floor(Chart::bSearch(DoubleArray(date, data_len), viewPortStartDate));
-    int endIndex = (int)ceil(Chart::bSearch(DoubleArray(date, data_len), viewPortEndDate));
+    int endIndex = (int)ceil(Chart::bSearch(DoubleArray(date, data_len), viewPortEndDate)) + 1;
     int noOfPoints = endIndex - startIndex + 1;        
 
     cout << "Start Index: " << startIndex << "End Index: " << endIndex << 
@@ -1065,18 +1065,18 @@ void Simple::read_data(int durationOfStock)
         conn.connect("indian_stocks", "localhost", "root", "waheguru13");        
         Query query = conn.query();             
         char *s = m_TickerSymbol->text().toLocal8Bit().data();
-        
+        cout << "stock: " <<  s << "\n";
         /* Now SELECT */             
         switch(durationOfStock)
         {
             case 1:                
-                query << "SELECT date, open, high, low, close, volume from bse_stocks_details WHERE bse_stock_id = (SELECT id from bse_stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";                
+                query << "SELECT date, open, high, low, close, volume from nse_dumps WHERE nse_stock_id = (SELECT id from nse_stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";                
                 break;
             case 7:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `bse_stocks_details` WHERE bse_stock_id = (SELECT id from bse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
                 break;
             case 30:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `bse_stocks_details` WHERE bse_stock_id = (SELECT id from bse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
 
         }        
         StoreQueryResult ares = query.store();
@@ -1086,7 +1086,7 @@ void Simple::read_data(int durationOfStock)
             data_len = 0;
             return;
         }  
-        data_len = ares.num_rows() - 1;
+        data_len = ares.num_rows() - 1 ;
         cout << "data len: " << data_len;
         date = new double[data_len + 1];
         open = new double[data_len + 1];
@@ -1103,7 +1103,8 @@ void Simple::read_data(int durationOfStock)
             low[i] = ares[i]["low"];
             close[i] = atof(ares[i]["close"]);
             volume[i] = ares[i]["volume"];  
-        }        
+        }      
+        //cout << "date: "<<  ares[ares.num_rows()]["date"].c_str;  
     } catch (BadQuery er) { // handle any connection or
         // query errors that may come up        
         cerr << "Error: " << er.what() << endl;        
@@ -1133,13 +1134,13 @@ void Simple::read_data_compare(int durationOfStock)
         switch(durationOfStock)
         {
             case 1:                
-                query << "SELECT date, open, high, low, close, volume from bse_bse_stocks_details WHERE stock_id = (SELECT id from bse_stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";
+                query << "SELECT date, open, high, low, close, volume from nse_dumps WHERE stock_id = (SELECT id from nse_stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";
                 break;
             case 7:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `bse_bse_stocks_details` WHERE stock_id = (SELECT id from bse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
                 break;
             case 30:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `bse_bse_stocks_details` WHERE stock_id = (SELECT id from bse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
 
         }
 
