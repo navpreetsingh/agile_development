@@ -1073,10 +1073,10 @@ void Simple::read_data(int durationOfStock)
                 query << "SELECT date, open, high, low, close, volume from nse_dumps WHERE nse_stock_id = (SELECT id from nse_stocks where stock_name = " << quote_only << s << " ) ORDER by date ASC";                
                 break;
             case 7:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date,  SUBSTRING_INDEX( GROUP_CONCAT( CAST( OPEN AS CHAR ) ORDER BY DATE ) ,  ',', 1 ) AS OPEN, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(CAST(close AS CHAR) ORDER BY date DESC), ',', 1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << " ) GROUP BY DATE_FORMAT(date, \"%X Week: %V\") ORDER by date ASC";
                 break;
             case 30:                
-                query << "SELECT MAX(date) AS date, COALESCE(open) AS open, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(close), ',', -1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
+                query << "SELECT MAX(date) AS date,  SUBSTRING_INDEX( GROUP_CONCAT( CAST( OPEN AS CHAR ) ORDER BY DATE ) ,  ',', 1 ) AS OPEN, max(high) AS high, min(low) AS low, SUBSTRING_INDEX(GROUP_CONCAT(CAST(close AS CHAR) ORDER BY date DESC), ',', 1) AS close, sum(volume) AS volume FROM `nse_dumps` WHERE nse_stock_id = (SELECT id from nse_stocks WHERE stock_name = " << quote_only << s << ") GROUP BY DATE_FORMAT(date, \"%M, %Y\") ORDER by date ASC";
 
         }        
         StoreQueryResult ares = query.store();

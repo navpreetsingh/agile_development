@@ -1,0 +1,23 @@
+<h1>Listing gammis</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @gammis.each do |gammi| %>
+  <tr>
+    <td><%= gammi.name %></td>
+    <td><%= link_to 'Show', gammi %></td>
+    <td><%= link_to 'Edit', edit_gammi_path(gammi) %></td>
+    <td><%= link_to 'Destroy', gammi, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Gammi', new_gammi_path %>
